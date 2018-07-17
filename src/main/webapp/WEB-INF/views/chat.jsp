@@ -23,7 +23,13 @@
 	sock.onmessage = onMessage;
 	sock.onclose = onClose;
 	function sendMessage(){
-		sock.send($("#message").val());
+		//서버로 메시지를 보낼때 JSON문자열로 전환을해서 전송할수있다.
+		var message = {};
+		message.message = $("#message").val();
+		message.number = $("#number").val();
+		message.test = "test";
+		$("#data").append(JSON.stringify(message)+"<br/>");
+		sock.send(JSON.stringify(message));
 	}
 	//evt파라미터는 웹소켓을 보내준 데이터다(자동으로 들어옴)
 	function onMessage(evt){
@@ -41,6 +47,7 @@
 </head>
 <body>
 	<input type="text" id="message" />
+	<input type="text" id="number" value="1"/>
 	<input type="button" id="sendBtn" value="전송" />
 	<div id="data"></div>
 </body>

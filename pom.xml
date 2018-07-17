@@ -116,18 +116,32 @@
 			<version>4.7</version>
 			<scope>test</scope>
 		</dependency>   
-<!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-websocket</artifactId>
-    <version>4.1.6.RELEASE</version>
-</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-websocket</artifactId>
+		    <version>4.1.6.RELEASE</version>
+		</dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.5.3</version>
             <scope>runtime</scope>
         </dependency>
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>2.9.5</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/net.sf.json-lib/json-lib-ext-spring -->
+		<dependency>
+		    <groupId>net.sf.json-lib</groupId>
+		    <artifactId>json-lib-ext-spring</artifactId>
+		    <version>1.0.2</version>
+		</dependency>
+
+        
 	</dependencies>
     <build>
         <plugins>
