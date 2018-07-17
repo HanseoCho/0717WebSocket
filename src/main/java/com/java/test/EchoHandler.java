@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -16,10 +19,15 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+@Component
 public class EchoHandler extends TextWebSocketHandler {
 	private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(EchoHandler.class);
 	
 	private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
+	
+	@Autowired
+	SqlSession sls;	
+	
 	/* 클라이언트 연결후 실행되는 메소드 */
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception{
@@ -48,6 +56,10 @@ public class EchoHandler extends TextWebSocketHandler {
 		System.out.println(1);
 		System.out.println("message : "+jObj.get("message"));
 		System.out.println("number : "+jObj.get("number"));
+		
+		/* DB연결확인용 (실제가능하면 메소드를 따로 빼두어야함 웹소켓 클래스에서 활동폭 확인 */
+		System.out.println(sls.selectList("test.selectTest"));
+		// db사용가능
 		
 		logger.info("{}로 부터 {} 받음",session.getId(),message.getPayload());
 		for(WebSocketSession sess : sessionList) {
