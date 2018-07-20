@@ -33,16 +33,22 @@
 	}
 	//evt파라미터는 웹소켓을 보내준 데이터다(자동으로 들어옴)
 	function onMessage(evt){
-		var data = evt.data;
-		$("#data").append(data+"<br/>");
+		//var data = evt.data;
+		//$("#data").append(data+"<br/>");
 		//sock.close();
+		var data = (evt.data);
+		var j = JSON.stringify(data);
+		var jo = JSON.parse(data);
+		console.log(data);
+		console.log(j);
+		console.log(jo);
+		console.log(jo.test);
+
+		$("#data").append(jo.test+"<br/>");
 	}
 	function onClose(evt){
 		$("#data").append("연결 끊김");
-	}
-	
-	
-	
+	}	
 </script>
 </head>
 <body>

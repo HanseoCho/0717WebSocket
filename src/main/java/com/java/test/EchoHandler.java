@@ -1,5 +1,6 @@
 package com.java.test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,14 +17,19 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonArrayFormatVisitor;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 @Component
 public class EchoHandler extends TextWebSocketHandler {
 	private static org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(EchoHandler.class);
 	
 	private List<WebSocketSession> sessionList = new ArrayList<WebSocketSession>();
+
+	//방구분을 List안의 List트로 해보는것도 좋은 시도일것같음
+	//private List<ArrayList<WebSocketSession>> sessionList = new ArrayList<ArrayList<WebSocketSession>>();
 	
 	@Autowired
 	SqlSession sls;	
@@ -41,7 +47,7 @@ public class EchoHandler extends TextWebSocketHandler {
 		}
 		logger.info(text);
 		for(WebSocketSession sess:sessionList) {
-			sess.sendMessage(new TextMessage(text));
+			sess.sendMessage(new TextMessage(session.getId()));
 		}
 		
 		logger.info("***************************************");
@@ -63,12 +69,34 @@ public class EchoHandler extends TextWebSocketHandler {
 		
 		logger.info("{}로 부터 {} 받음",session.getId(),message.getPayload());
 		for(WebSocketSession sess : sessionList) {
-			sess.sendMessage(new TextMessage(session.getId() + " : " + message.getPayload()));
+			HashMap<String, Object> map = new HashMap<String,Object>();
+			map.put("test", "test");
+			map.put("message", session.getId() + " : " + message.getPayload());
+			//텍스트를 보내는 기존방식 
+			//sess.sendMessage(new TextMessage(session.getId() + " : " + message.getPayload()));
+			//jsonObject전송하기
+			JSONObject j = new JSONObject();
+			j = JSONObject.fromObject(JSONSerializer.toJSON(map));
+			System.out.println(j.toString());
+			sess.sendMessage(new TextMessage(j.toString()));
 		}
 	}
+	/* 나가면 연결이 끓긴다. */
 	@Override
 	public void afterConnectionClosed(WebSocketSession session,CloseStatus status) throws Exception {
 		sessionList.remove(session);
 		logger.info("{} 연결 끊김",session.getId());
+	}
+	
+	// 
+	public void sayserver(HashMap<String, Object> param) {
+		
+	}
+
+	public void conObj (WebSocketSession sess, HashMap<String, Object> param) throws Exception {
+		JSONObject j = new JSONObject();
+		j = JSONObject.fromObject(JSONSerializer.toJSON(param));
+		System.out.println(j.toString());
+		sess.sendMessage(new TextMessage(j.toString()));
 	}
 }
